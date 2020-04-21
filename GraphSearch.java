@@ -1,29 +1,39 @@
+import java.util.*;
+
 class GraphSearch {
 
     // Depth First Search using recursion
     ArrayList<Node> DFSRec(final Node start, final Node end) {
         // Create arraylist of visited nodes
         ArrayList<Node> visited = new ArrayList<Node>();
-        if (!start.visFlag) {
-            visited.add(start);
-            start.visFlag = true;
-        }
+        visited.addAll(DFSRecHelper(start, end));
 
-        // If start node is end node return
-        if (start.nodeVal.equals(end.nodeVal)) {
+        if (visited.contains(end)) {
             return visited;
         }
 
-        // Otherwise go thru adjacent nodes depth first
+        return null;
+    }
+
+    ArrayList<Node> DFSRecHelper(final Node start, final Node end) {
+        ArrayList<Node> visList = new ArrayList<Node>();
+        start.visFlag = true;
+        visList.add(start);
+
+        if (start == end) {
+            return visList;
+        }
+
         for (int i = 0; i < start.adjList.size(); i++) {
-            // Check if node not visited
             if (!start.adjList[i].visFlag) {
-                visited.addAll(DFSRec(start.adjList[i], end));
+                visList.addAll(DFSRecHelper(start.adjList[i], end));
                 if (visited.contains(end)) {
                     return visited;
                 }
             }
         }
+
+        return visList;
     }
 
     // Depth First Search iterative
@@ -42,7 +52,7 @@ class GraphSearch {
             visited.add(cur);
 
             // If the current node is the end node add to arraylist and return
-            if (cur.nodeVal.equals(end.nodeVal)) {
+            if (cur == end) {
                 return visited;
             }
 
@@ -61,31 +71,43 @@ class GraphSearch {
 
     // Breadth First recursive
     ArrayList<Node> BFTRec(final Graph graph) {
+        ArrayList<Node> traversal = new ArrayList<Node>();
+
 
     }
 
+    ArrayList<Node> BFTRecHelper(Graph g, Queue<Node> q, ArrayList<Node list>)
+
     // Breadth First iterative
-    ArrayList<Node> BFTIter(Graph g) {
+    ArrayList<Node> BFTIter(final Graph g) {
         // Initialize queue to store nodes and arraylist of visited nodes
         Queue<Node> q = new LinkedList<Node>();
         ArrayList<Node> visited = new ArrayList<Node>();
+        Iterator<Node> nodes = graph.getAllNodes().iterator();
 
-        // Add start to the queue
-        q.add(start);
-
-        while (q.size() > 0) {
-            Node cur = q.pop();
-            visited.add(curr);
-
-            // If cur is the end node, add it to visited and return
-            if(cur.nodeVal.equals(end.nodeVal)) {
-                return visited;
+        while (nodes.hasNext()) {
+            Node search = nodes.next();
+            if (!visited.contains(search)) {
+                q.add(search);
+            }
+            else {
+                continue;
             }
 
-            // If not visited add children to queue
-            for (int i = 0; i < cur.adjList.size(); i++) {
-                if (!visited.contains(cur.adjList[i])) {
-                    q.add(cur.adjList[i]);
+            while (q.size() > 0) {
+                Node cur = q.remove();
+                visited.add(curr);
+
+                // If cur is the end node, add it to visited and return
+                if(cur.nodeVal.equals(end.nodeVal)) {
+                    return visited;
+                }
+
+                // If not visited add children to queue
+                for (int i = 0; i < cur.adjList.size(); i++) {
+                    if (!visited.contains(cur.adjList[i])) {
+                        q.add(cur.adjList[i]);
+                    }
                 }
             }
         }
